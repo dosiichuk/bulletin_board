@@ -5,13 +5,12 @@ import clsx from 'clsx';
 
 // import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-
+import { Navbar } from '../../common/Navbar/Navbar';
 import styles from './Header.module.scss';
 
-const Component = ({className, children}) => (
+const Component = ({ className }) => (
   <div className={clsx(className, styles.root)}>
-    <h2>Header</h2>
-    {children}
+    <Navbar />
   </div>
 );
 

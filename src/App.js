@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 
 import { createTheme, StylesProvider, ThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
+import lightGreen from '@material-ui/core/colors/lightGreen';
 
 import { store } from './redux/store';
 
@@ -16,7 +17,13 @@ import { NotFound } from './components/views/NotFound/NotFound';
 
 const theme = createTheme({
   palette: {
-    primary: { main: '#2B4C6F' },
+    primary: lightGreen,
+    secondary: {
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
   },
 });
 
