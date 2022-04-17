@@ -4,12 +4,13 @@ import { Provider } from 'react-redux';
 
 import { createTheme, StylesProvider, ThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import lightGreen from '@material-ui/core/colors/lightGreen';
+import blue from '@material-ui/core/colors/blue';
 
 import { store } from './redux/store';
 
 import { MainLayout } from './components/layout/MainLayout/MainLayout';
 import { Homepage } from './components/views/Homepage/Homepage';
+import { SinglePost } from './components/features/SinglePost/SinglePost';
 import { Post } from './components/views/Post/Post';
 import { PostEdit } from './components/views/PostEdit/PostEdit';
 import { PostAdd } from './components/views/PostAdd/PostAdd';
@@ -17,7 +18,7 @@ import { NotFound } from './components/views/NotFound/NotFound';
 
 const theme = createTheme({
   palette: {
-    primary: lightGreen,
+    primary: blue,
     secondary: {
       light: '#ff7961',
       main: '#f44336',
@@ -37,7 +38,7 @@ const App = () => (
             <Switch>
               <Route exact path='/' component={Homepage} />
               <Route exact path='/post/add' component={PostAdd} />
-              <Route exact path='/post/:id' component={Post} />
+              <Route exact path='/post/:id' component={SinglePost} />
               <Route exact path='/post/:id/edit' component={PostEdit} />
               <Route path='*' component={NotFound} />
             </Switch>

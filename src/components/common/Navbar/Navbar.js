@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
 
-// import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
+import { connect } from 'react-redux';
+import { getLoginStatus, getRole } from '../../../redux/authRedux';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Container from '@material-ui/core/Container';
@@ -12,7 +12,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+
+import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
+
+import styles from './Navbar.module.scss';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Component = () => {
+const Component = ({ role, loginStatus }) => {
   const classes = useStyles();
   return (
     <AppBar position='static' className={classes.appBar}>
@@ -46,32 +49,38 @@ const Component = () => {
             color='inherit'
             aria-label='menu'
           >
-            <MenuIcon />
+            <CardGiftcardIcon />
           </IconButton>
-          <Typography variant='h6' className={classes.title}>
+          <Typography variant='h6' className={clsx(classes.title, styles.navTitle)}>
             Bulletin Board
           </Typography>
-          <Button color='inherit'>Login</Button>
+          {!loginStatus && <Button color='inherit'>Login</Button>}
+          {loginStatus && (
+            <>
+              <Button color='inherit'>My offers</Button>{' '}
+              <Button color='inherit'>Logout</Button>
+            </>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
   );
 };
 
-Component.propTypes = {};
+Component.propTypes = {
+  loginStatus: PropTypes.bool.isRequired,
+  role: PropTypes.oneOf(['admin', 'user']),
+};
 
-// const mapStateToProps = state => ({
-//   someProp: reduxSelector(state),
-// });
+const mapStateToProps = state => ({
+  loginStatus: getLoginStatus(state),
+  role: getRole(state),
+});
 
 // const mapDispatchToProps = dispatch => ({
 //   someAction: arg => dispatch(reduxActionCreator(arg)),
 // });
 
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
+const ContainerComponent = connect(mapStateToProps)(Component);
 
-export {
-  Component as Navbar,
-  // Container as Navbar,
-  Component as NavbarComponent,
-};
+export { ContainerComponent as Navbar, Component as NavbarComponent };

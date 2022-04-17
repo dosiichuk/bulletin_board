@@ -2,3 +2,8 @@
 
 // .root {
 // }
+.navTitle{
+  @media (max-width: 450px) {
+    display: none;
+  }
+}

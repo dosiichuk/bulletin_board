@@ -1,38 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
-import styles from './Paper.module.scss';
+// import { connect } from 'react-redux';
+// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
+import styles from './Button.module.scss';
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
     '& > *': {
-      margin: theme.spacing(0),
-      width: '100%',
-      height: 'minContent',
-      padding: '2rem 1rem',
+      margin: theme.spacing(1),
     },
   },
 }));
 
-const Component = ({ className, children }) => {
+const Component = ({ children, color, action }) => {
   const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <Paper elevation={0}>{children}</Paper>
-    </div>
+    <Button
+      onClick={action}
+      variant='contained'
+      color={color}
+      sx={{ backgroundColor: color }}
+    >
+      {children}
+    </Button>
   );
 };
 
 Component.propTypes = {
   children: PropTypes.node,
-  className: PropTypes.string,
+  color: PropTypes.string,
+  action: PropTypes.func,
 };
 
 // const mapStateToProps = state => ({
@@ -46,7 +47,7 @@ Component.propTypes = {
 // const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
-  Component as Paper,
-  // Container as Paper,
-  Component as PaperComponent,
+  Component as Button,
+  // Container as Button,
+  Component as ButtonComponent,
 };

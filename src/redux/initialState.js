@@ -87,4 +87,13 @@ export const initialState = {
       error: false,
     },
   },
+  user: {
+    loggedIn: true,
+    name: 'Don Chance',
+    role: 'user',
+    loading: {
+      active: true,
+      error: false,
+    },
+  },
 };
