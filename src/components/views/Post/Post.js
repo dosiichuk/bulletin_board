@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -13,12 +14,12 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
+import { getUserData } from '../../../redux/authRedux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
 import styles from './Post.module.scss';
@@ -46,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Component = ({ data }) => {
+const Component = ({ data, userData }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -59,7 +60,7 @@ const Component = ({ data }) => {
       <CardHeader
         avatar={
           <Avatar aria-label='recipe' className={classes.avatar}>
-            {data.author[0]}
+            {data.author.name[0]}
           </Avatar>
         }
         action={
@@ -81,12 +82,10 @@ const Component = ({ data }) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label='add to favorites'>
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label='share'>
-          <ShareIcon />
-        </IconButton>
+        <Link to={`/post/${data._id}`}>See details</Link>
+        {userData.loggedIn && userData.id === data.author._id && (
+          <Link to={`/post/${data._id}/edit`}>Edit</Link>
+        )}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -100,7 +99,7 @@ const Component = ({ data }) => {
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
-          <Typography paragraph>Method:</Typography>
+          <Typography paragraph>Content:</Typography>
           <Typography paragraph>{data.content}</Typography>
         </CardContent>
       </Collapse>
@@ -110,14 +109,14 @@ const Component = ({ data }) => {
 
 Component.propTypes = {
   data: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string,
     summary: PropTypes.string.isRequired,
     publishedDate: PropTypes.string,
     updatedDate: PropTypes.string,
-    email: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
+
+    author: PropTypes.object,
     status: PropTypes.oneOf(['published', 'draft', 'closed']),
     photo: PropTypes.string,
     price: PropTypes.number,
@@ -126,18 +125,14 @@ Component.propTypes = {
   }),
 };
 
-// const mapStateToProps = state => ({
-//   someProp: reduxSelector(state),
-// });
+const mapStateToProps = state => ({
+  userData: getUserData(state),
+});
 
 // const mapDispatchToProps = dispatch => ({
 //   someAction: arg => dispatch(reduxActionCreator(arg)),
 // });
 
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
+const Container = connect(mapStateToProps)(Component);
 
-export {
-  Component as Post,
-  // Container as Post,
-  Component as PostComponent,
-};
+export { Container as Post, Component as PostComponent };

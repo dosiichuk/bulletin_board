@@ -1,22 +1,13 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
-
 import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 import { PostForm } from '../PostForm/PostForm';
-import { addPostFormSchema } from '../../../schemas/addPostSchema';
-import { createPostRequest } from '../../../redux/postsRedux';
-import styles from './AddPostForm.module.scss';
+import { createPostRequest, getPostById } from '../../../redux/postsRedux';
 import { getUserData, getUserId } from '../../../redux/authRedux';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles({
   container: {
@@ -54,13 +45,14 @@ const useStyles = makeStyles({
   },
 });
 
-const Component = ({ children, createPost, author, email, ...props }) => {
+const Component = ({ children, createPost, author, email, post, ...props }) => {
   return (
     <PostForm
-      formTitle='Publish ad'
+      formTitle='Edit your post'
       action={createPost}
       author={author}
       email={email}
+      {...post}
     />
   );
 };
@@ -70,7 +62,7 @@ Component.propTypes = {
   className: PropTypes.string,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   author: getUserData(state).name,
   email: getUserData(state).email,
 });
@@ -81,4 +73,4 @@ const mapDispatchToProps = dispatch => ({
 
 const ContainerComponent = connect(mapStateToProps, mapDispatchToProps)(Component);
 
-export { ContainerComponent as AddPostForm, Component as AddPostFormComponent };
+export { ContainerComponent as EditPostForm, Component as EditPostFormComponent };

@@ -57,7 +57,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Component = ({ data }) => {
-  console.log(data);
   const classes = useStyles();
 
   return (
@@ -66,7 +65,7 @@ const Component = ({ data }) => {
         <CardHeader
           avatar={
             <Avatar aria-label='recipe' className={classes.avatar}>
-              {data.author[0]}
+              {data.author.name[0]}
             </Avatar>
           }
           action={
@@ -107,15 +106,13 @@ const Component = ({ data }) => {
 
 Component.propTypes = {
   data: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string,
     summary: PropTypes.string.isRequired,
     publishedDate: PropTypes.string,
     updatedDate: PropTypes.string,
-    email: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    status: PropTypes.oneOf(['published', 'draft', 'closed']),
+    author: PropTypes.object,
     photo: PropTypes.string,
     price: PropTypes.number,
     phone: PropTypes.string,

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getLoginStatus, getRole } from '../../../redux/authRedux';
+import { getLoginStatus, getRole, loginRequest } from '../../../redux/authRedux';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Container from '@material-ui/core/Container';
@@ -16,11 +16,16 @@ import IconButton from '@material-ui/core/IconButton';
 import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
 
 import styles from './Navbar.module.scss';
+import { initialState } from '../../../redux/initialState';
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.primary[800],
+  },
+  logo: {
+    textDecoration: 'none',
+    color: theme.palette.primary[100],
   },
   appBar: {
     backgroundColor: theme.palette.primary[800],
@@ -37,24 +42,33 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Component = ({ role, loginStatus }) => {
+const Component = ({ role, loginStatus, login }) => {
   const classes = useStyles();
+  const handleLogin = () => {
+    login();
+  };
   return (
     <AppBar position='static' className={classes.appBar}>
       <Container maxWidth='lg'>
         <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge='start'
-            className={classes.menuButton}
-            color='inherit'
-            aria-label='menu'
-          >
-            <CardGiftcardIcon />
-          </IconButton>
+          <a href='/' className={classes.logo}>
+            <IconButton
+              edge='start'
+              className={classes.menuButton}
+              color='inherit'
+              aria-label='menu'
+            >
+              <CardGiftcardIcon />
+            </IconButton>
+          </a>
           <Typography variant='h6' className={clsx(classes.title, styles.navTitle)}>
             Bulletin Board
           </Typography>
-          {!loginStatus && <Button color='inherit'>Login</Button>}
+          {!loginStatus && (
+            <Button color='inherit' action={handleLogin}>
+              Login
+            </Button>
+          )}
           {loginStatus && (
             <>
               <Button color='inherit'>My offers</Button>{' '}
@@ -77,10 +91,10 @@ const mapStateToProps = state => ({
   role: getRole(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = dispatch => ({
+  login: () => dispatch(loginRequest()),
+});
 
-const ContainerComponent = connect(mapStateToProps)(Component);
+const ContainerComponent = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export { ContainerComponent as Navbar, Component as NavbarComponent };
