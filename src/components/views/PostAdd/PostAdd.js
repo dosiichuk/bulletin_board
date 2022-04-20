@@ -6,12 +6,12 @@ import clsx from 'clsx';
 // import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
-import { AddPostForm } from '../../features/AddPostForm/AddPostForm';
+import { PostForm } from '../../features/PostForm/PostForm';
 import styles from './PostAdd.module.scss';
 
 const Component = ({ className, children }) => (
   <div className={clsx(className, styles.root)}>
-    <AddPostForm />
+    <PostForm formTitle='Publish ad' formType='createPost' />
   </div>
 );
 

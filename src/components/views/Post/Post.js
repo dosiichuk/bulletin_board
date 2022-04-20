@@ -13,6 +13,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+
 import { red } from '@material-ui/core/colors';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -23,6 +24,7 @@ import { getUserData } from '../../../redux/authRedux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
 import styles from './Post.module.scss';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +46,16 @@ const useStyles = makeStyles(theme => ({
   },
   avatar: {
     backgroundColor: red[500],
+  },
+  button: {
+    textDecoration: 'none',
+    display: 'inline-block',
+    padding: '5px 10px',
+    margin: '0 5px',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: theme.palette.primary[700],
+    borderRadius: '5px',
   },
 }));
 
@@ -69,7 +81,7 @@ const Component = ({ data, userData }) => {
           </IconButton>
         }
         title={data.title}
-        subheader={data.publishedDate}
+        subheader={new Date(parseInt(data.publishedDate)).toISOString().slice(0, 10)}
       />
       <CardMedia
         className={classes.media}
@@ -82,9 +94,13 @@ const Component = ({ data, userData }) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Link to={`/post/${data._id}`}>See details</Link>
+        <Link to={`/post/${data._id}`} className={classes.button}>
+          See details
+        </Link>
         {userData.loggedIn && userData.id === data.author._id && (
-          <Link to={`/post/${data._id}/edit`}>Edit</Link>
+          <Link to={`/post/${data._id}/edit`} className={classes.button}>
+            Edit
+          </Link>
         )}
         <IconButton
           className={clsx(classes.expand, {

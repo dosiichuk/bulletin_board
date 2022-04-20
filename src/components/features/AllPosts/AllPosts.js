@@ -33,7 +33,7 @@ const Component = props => {
     console.log('running fetch');
     props.fetchPosts();
   }, []);
-  console.log(props.AllPosts);
+
   const classes = useStyles();
   return (
     <div className={clsx(classes.root)}>

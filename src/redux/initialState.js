@@ -91,6 +91,7 @@ export const initialState = {
     loggedIn: true,
     name: 'Goga',
     email: 'test@test.com',
+    location: 'Warsaw',
     role: undefined,
     id: '625dd54c1ed2a75524bb1e77',
     loading: {

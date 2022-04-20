@@ -15,7 +15,7 @@ const Component = ({ loginStatus }) => (
       <h2 className={styles.pageTitle}>All current advertisements</h2>
       {loginStatus && (
         <Link to='/post/add' className={styles.button}>
-          CREATE AN AD
+          CREATE A POST
         </Link>
       )}
     </div>

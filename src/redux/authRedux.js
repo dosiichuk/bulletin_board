@@ -3,7 +3,6 @@ import config from '../config';
 
 /* selectors */
 export const getUserData = ({ user }) => user;
-export const getUserId = ({ user }) => user.id;
 export const getLoginStatus = ({ user }) => user.loggedIn;
 export const getRole = ({ user }) => user.role;
 

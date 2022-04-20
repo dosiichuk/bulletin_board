@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Container from '@material-ui/core/Container';
@@ -10,12 +10,16 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 import { addPostFormSchema } from '../../../schemas/addPostSchema';
-import { createPostRequest } from '../../../redux/postsRedux';
+import {
+  createPostRequest,
+  updatePostRequest,
+  getPostById,
+} from '../../../redux/postsRedux';
 import styles from './PostForm.module.scss';
-import { getUserId } from '../../../redux/authRedux';
+import { getUserData } from '../../../redux/authRedux';
 
 const useStyles = makeStyles({
   container: {
@@ -31,6 +35,10 @@ const useStyles = makeStyles({
     height: 140,
   },
   entry: {},
+  buttons: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   button: {
     width: '40%',
     backgroundColor: '#1565c0',
@@ -53,7 +61,24 @@ const useStyles = makeStyles({
   },
 });
 
-const Component = ({ formTitle, action, authorId, ...props }) => {
+const Component = ({
+  formType,
+  formTitle,
+  authorId,
+  createPost,
+  updatePost,
+  ...props
+}) => {
+  const { id } = useParams();
+  const defaultPost = {
+    title: '',
+    price: '',
+    location: '',
+    summary: '',
+    content: '',
+  };
+  const post = useSelector(state => getPostById(state, id)) || defaultPost;
+  console.log(post);
   const history = useHistory();
   const {
     register,
@@ -65,15 +90,40 @@ const Component = ({ formTitle, action, authorId, ...props }) => {
   const imagePickerRef = useRef();
   const onSubmitHandler = (data, e) => {
     e.preventDefault();
-    console.log({ ...data, author: authorId, status: 'published' }, e);
     reset();
-    console.log('submitted');
-    action({ ...data, author: authorId, status: 'published' });
+    if (formType === 'createPost') {
+      createPost({ ...data, author: authorId, status: 'published' });
+    } else if (formType === 'editPost') {
+      updatePost({ ...data, id, author: authorId, status: 'published' });
+    }
     history.push('/');
   };
   const pickImage = e => {
     imagePickerRef.current.click();
   };
+  const fields = [
+    { label: 'Author:', name: 'author', defaultValue: props.author || '' },
+    { label: 'Email:', name: 'email', defaultValue: props.email || '' },
+    { label: 'Title:', name: 'title', defaultValue: post.title || '' },
+    { label: 'Price:', name: 'price', defaultValue: post.price || '' },
+    { label: 'Location:', name: 'location', defaultValue: post.location || '' },
+    { label: 'Summary:', name: 'summary', defaultValue: post.summary || '' },
+    { label: 'Content:', name: 'content', defaultValue: post.content || '' },
+  ];
+  const generateTextField = ({ label, defaultValue, name }) => (
+    <div key={name} className={classes.entry}>
+      <TextField
+        id='outlined-disabled'
+        label={label}
+        variant='outlined'
+        defaultValue={defaultValue}
+        {...register(name)}
+      />
+      <small className={errors[name] ? classes.errorMessage : ''}>
+        {errors[name]?.message}
+      </small>
+    </div>
+  );
   return (
     <Container className={classes.container}>
       <div className={clsx(styles.root)}>
@@ -96,91 +146,17 @@ const Component = ({ formTitle, action, authorId, ...props }) => {
               Pick image
             </Button>
           </div>
-          <div className={classes.entry}>
-            <TextField
-              id='outlined-disabled'
-              label='Author:'
-              variant='outlined'
-              defaultValue={props.author || ''}
-              {...register('author')}
-            />
+          {fields.map(field => generateTextField(field))}
+          <div className={classes.buttons}>
+            <Button type='submit' color='primary' className={classes.button}>
+              {formTitle}
+            </Button>
+            {formType === 'createPost' && (
+              <Button type='submit' color='secondary' className={classes.button}>
+                Save to draft
+              </Button>
+            )}
           </div>
-          <div className={classes.entry}>
-            <TextField
-              id='outlined-disabled'
-              label='Email:'
-              defaultValue={props.email || ''}
-              variant='outlined'
-              {...register('email')}
-            />
-          </div>
-
-          <div className={classes.entry}>
-            <TextField
-              required
-              id='outlined-required'
-              label='Title:'
-              defaultValue={props.title || ''}
-              variant='outlined'
-              {...register('title')}
-            />
-            <small className={errors.title ? classes.errorMessage : ''}>
-              {errors.title?.message}
-            </small>
-          </div>
-          <div className={classes.entry}>
-            <TextField
-              required
-              id='outlined-required'
-              label='Price:'
-              defaultValue={props.price || ''}
-              variant='outlined'
-              {...register('price')}
-            />
-            <small className={errors.price ? classes.errorMessage : ''}>
-              {errors.price?.message}
-            </small>
-          </div>
-          <div className={classes.entry}>
-            <TextField
-              required
-              id='outlined-required'
-              label='Location:'
-              defaultValue={props.location || ''}
-              variant='outlined'
-            />
-          </div>
-          <div className={classes.entry}>
-            <TextField
-              id='outlined-multiline-static'
-              label='Summary:'
-              multiline
-              minRows={2}
-              defaultValue={props.summary || ''}
-              variant='outlined'
-              {...register('summary')}
-            />
-            <small className={errors.summary ? classes.errorMessage : ''}>
-              {errors.summary?.message}
-            </small>
-          </div>
-          <div className={classes.entry}>
-            <TextField
-              id='outlined-multiline-static'
-              label='Description:'
-              multiline
-              minRows={6}
-              defaultValue={props.content || ''}
-              variant='outlined'
-              {...register('content')}
-            />
-            <small className={errors.content ? classes.errorMessage : ''}>
-              {errors.content?.message}
-            </small>
-          </div>
-          <Button type='submit' color='primary' className={classes.button}>
-            {formTitle}
-          </Button>
         </form>
       </div>
     </Container>
@@ -189,10 +165,16 @@ const Component = ({ formTitle, action, authorId, ...props }) => {
 
 Component.propTypes = {};
 
-const mapStateToProps = state => ({
-  authorId: getUserId(state),
+const mapStateToProps = (state, ownProps) => ({
+  authorId: getUserData(state).id,
+  author: getUserData(state).name,
+  email: getUserData(state).email,
+});
+const mapDispatchToProps = dispatch => ({
+  createPost: postData => dispatch(createPostRequest(postData)),
+  updatePost: postData => dispatch(updatePostRequest(postData)),
 });
 
-const ContainerComponent = connect(mapStateToProps)(Component);
+const ContainerComponent = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export { ContainerComponent as PostForm, Component as PostFormComponent };
