@@ -86,6 +86,7 @@ export const initialState = {
       active: false,
       error: false,
     },
+    filters: { author: { _id: '28340' } },
   },
   user: {
     loggedIn: true,
