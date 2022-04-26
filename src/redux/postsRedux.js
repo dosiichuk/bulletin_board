@@ -46,7 +46,6 @@ export const fetchPostsRequest = filters => async (dispatch, getState) => {
         dispatch(fetchSuccess(data));
       }
     }
-    console.log('after', getAll(getState()));
   } catch (err) {
     dispatch(fetchError(err));
   }
@@ -61,7 +60,7 @@ export const createPostRequest = postData => async dispatch => {
       data: postData,
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    console.log(response);
+
     if (response.statusText === 'OK') {
       dispatch(createSuccess(response.data));
     }
@@ -77,7 +76,7 @@ export const updatePostRequest = postData => async dispatch => {
       `${config.api.baseUrl}/posts/${postData.id}`,
       postData
     );
-    console.log(response);
+
     if (response.statusText === 'OK') {
       dispatch(updateSuccess(response.data));
     }
@@ -90,7 +89,7 @@ export const deletePostRequest = _id => async dispatch => {
   try {
     dispatch(fetchStarted());
     const response = await axios.delete(`${config.api.baseUrl}/posts/${_id}`);
-    console.log('delete response', response);
+
     if (response.statusText === 'OK') {
       dispatch(deleteSuccess(_id));
     }

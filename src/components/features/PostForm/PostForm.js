@@ -179,14 +179,14 @@ const Component = ({
                     `http://localhost:8000/${post.photo}` ||
                     `http://localhost:8000/uploads/images/generic.jpg`
                   }
-                  alt='image'
                   className={classes.image}
+                  alt={post.photo}
                 />
               ) : (
                 <img
                   src={previewUrl || `http://localhost:8000/uploads/images/generic.jpg`}
-                  alt='image'
                   className={classes.image}
+                  alt={post.photo}
                 />
               )}
             </div>
