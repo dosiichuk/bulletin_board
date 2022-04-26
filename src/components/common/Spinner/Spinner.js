@@ -21,8 +21,4 @@ function Component() {
   );
 }
 
-// Component.propTypes = {
-
-// };
-
 export { Component as Spinner, Component as SpinnerComponent };

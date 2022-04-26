@@ -1,25 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 import { getLoginStatus } from '../../../redux/authRedux';
 import { AllPosts } from '../../features/AllPosts/AllPosts';
-import styles from './Homepage.module.scss';
+import styles from './MyPosts.module.scss';
 
 const Component = ({ loginStatus }) => (
   <div className={clsx(styles.root)}>
     <div className={styles.pageHeading}>
-      <h2 className={styles.pageTitle}>All current advertisements</h2>
-      {loginStatus && (
-        <Link to='/post/add' className={styles.button}>
-          CREATE A POST
-        </Link>
-      )}
+      <h2 className={styles.pageTitle}>My Posts</h2>
     </div>
-    <AllPosts />
+    {loginStatus && <AllPosts onlyMyPosts={true} />}
   </div>
 );
 
@@ -33,4 +27,4 @@ const mapStateToProps = state => ({
 
 const Container = connect(mapStateToProps)(Component);
 
-export { Container as Homepage, Component as HomepageComponent };
+export { Container as MyPosts, Component as MyPostsComponent };

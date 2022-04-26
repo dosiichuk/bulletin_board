@@ -2,10 +2,10 @@ import axios from 'axios';
 import config from '../config';
 
 /* selectors */
-export const getAll = ({ posts, filters }) => {
-  // if (filters.author) {
-  //   return posts.data.filter(post => post.author._id === filters.author._id);
-  // }
+export const getAll = ({ posts, user }, onlyMyPosts = false) => {
+  if (onlyMyPosts) {
+    return posts.data.filter(post => post.author.name === user.name);
+  }
   return posts.data;
 };
 export const getPostById = ({ posts }, id) => posts.data.find(post => post._id == id);
@@ -23,7 +23,6 @@ const CREATE_SUCCESS = createActionName('CREATE_SUCCESS');
 const UPDATE_SUCCESS = createActionName('UPDATE_SUCCESS');
 const DELETE_SUCCESS = createActionName('DELETE_SUCCESS');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
-const ADD_FILTER = createActionName('ADD_FILTER');
 
 /* action creators */
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
@@ -32,7 +31,6 @@ export const createSuccess = payload => ({ payload, type: CREATE_SUCCESS });
 export const updateSuccess = payload => ({ payload, type: UPDATE_SUCCESS });
 export const deleteSuccess = payload => ({ payload, type: DELETE_SUCCESS });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
-export const addFilter = payload => ({ payload, type: ADD_FILTER });
 
 /* thunk creators */
 export const fetchPostsRequest = filters => async (dispatch, getState) => {
@@ -124,14 +122,16 @@ export const reducer = (statePart = [], action = {}) => {
       };
     }
     case CREATE_SUCCESS: {
-      return {
-        ...statePart,
-        loading: {
-          active: false,
-          error: false,
-        },
-        data: [...statePart.data, action.payload],
-      };
+      if (action.payload.status === 'published') {
+        return {
+          ...statePart,
+          loading: {
+            active: false,
+            error: false,
+          },
+          data: [...statePart.data, action.payload],
+        };
+      }
     }
     case UPDATE_SUCCESS: {
       return {
@@ -162,12 +162,6 @@ export const reducer = (statePart = [], action = {}) => {
           active: false,
           error: action.payload,
         },
-      };
-    }
-    case ADD_FILTER: {
-      return {
-        ...statePart,
-        filters: { ...statePart.filters, ...action.payload },
       };
     }
 

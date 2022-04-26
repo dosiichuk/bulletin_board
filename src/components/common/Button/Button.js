@@ -4,12 +4,10 @@ import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-// import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-
-import styles from './Button.module.scss';
 const useStyles = makeStyles(theme => ({
   button: {
+    textDecoration: 'none',
+    color: theme.palette.primary[100],
     padding: '5px 10px',
     borderRadius: '5px',
     '&:hover': {
@@ -45,18 +43,4 @@ Component.propTypes = {
   action: PropTypes.func,
 };
 
-// const mapStateToProps = state => ({
-//   someProp: reduxSelector(state),
-// });
-
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
-
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
-
-export {
-  Component as Button,
-  // Container as Button,
-  Component as ButtonComponent,
-};
+export { Component as Button, Component as ButtonComponent };

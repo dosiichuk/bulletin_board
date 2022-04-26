@@ -90,7 +90,7 @@ export const initialState = {
   },
   user: {
     loggedIn: true,
-    name: 'Goga',
+    name: 'John Doe',
     email: 'test@test.com',
     location: 'Warsaw',
     role: undefined,

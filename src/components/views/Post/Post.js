@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -19,12 +20,7 @@ import { red } from '@material-ui/core/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import { connect } from 'react-redux';
 import { getUserData } from '../../../redux/authRedux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-
-import styles from './Post.module.scss';
-import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,7 +55,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Component = ({ data, userData }) => {
+const Component = ({ data, user }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -97,7 +93,7 @@ const Component = ({ data, userData }) => {
         <Link to={`/post/${data._id}`} className={classes.button}>
           See details
         </Link>
-        {userData.loggedIn && userData.id === data.author._id && (
+        {user.loggedIn && user.id === data.author._id && (
           <Link to={`/post/${data._id}/edit`} className={classes.button}>
             Edit
           </Link>
@@ -142,7 +138,7 @@ Component.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  userData: getUserData(state),
+  user: getUserData(state),
 });
 
 // const mapDispatchToProps = dispatch => ({

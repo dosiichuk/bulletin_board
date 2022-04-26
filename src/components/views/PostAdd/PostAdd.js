@@ -1,37 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import clsx from 'clsx';
-
-// import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-
 import { PostForm } from '../../features/PostForm/PostForm';
-import styles from './PostAdd.module.scss';
 
-const Component = ({ className, children }) => (
-  <div className={clsx(className, styles.root)}>
-    <PostForm formTitle='Publish ad' formType='createPost' />
-  </div>
-);
+const Component = () => <PostForm formTitle='Publish ad' formType='createPost' />;
 
-Component.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-};
+Component.propTypes = {};
 
-// const mapStateToProps = state => ({
-//   someProp: reduxSelector(state),
-// });
-
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
-
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
-
-export {
-  Component as PostAdd,
-  // Container as PostAdd,
-  Component as PostAddComponent,
-};
+export { Component as PostAdd, Component as PostAddComponent };
